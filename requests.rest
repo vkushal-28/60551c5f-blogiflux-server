@@ -1,0 +1,112 @@
+
+# POST http://localhost:3000/signin
+# Content-Type: application/json
+
+# {
+#     "email":"joyal@gmail.com",
+#     "password":"Joyal@123"
+# }
+
+# # change password
+# POST http://localhost:3000/change-password
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Yjg5Yzg5NzBlZDU4YmE5ODU0OWQzNSIsImlhdCI6MTcyMzM3NDc0Mn0.pwLZpbcbXOgeqo3bqaqq2XY3HaLaelwTgRaQr0BJCJ0
+
+# {
+#     "currentPassword":"Joyal@123",
+#     "newPassword":"Joyal@1234"
+# }
+
+# # new notification
+# GET http://localhost:3000/new-notification
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTAyNjMxMzg1OTQzOTNhMTRhZTQ3YSIsImlhdCI6MTcyMzc1MjM5OH0.n2ME9MkXUMUnEn68UJegFJWM9Rh5mUgyNec4XMg_Ozw
+
+# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Yjg5Yzg5NzBlZDU4YmE5ODU0OWQzNSIsImlhdCI6MTcyMzM3NDc0Mn0.pwLZpbcbXOgeqo3bqaqq2XY3HaLaelwTgRaQr0BJCJ0
+
+# =============================
+
+
+# Latest blogs
+# GET  http://localhost:3000/latest-blogs
+# Content-Type: application/json
+
+# =============================
+
+# Latest blogs
+# GET  http://localhost:3000/trending-blogs
+# Content-Type: application/json
+# =============================
+
+# search blogs
+# POST  http://localhost:3000/search-blogs
+# Content-Type: application/json
+
+# {
+#     "tag":"technology",
+#     "page":1,
+#     "query":""
+# }
+
+# =============================
+
+# search users
+# POST  http://localhost:3000/search-users
+# Content-Type: application/json
+
+# {
+#     "query":"joy"
+# }
+
+# =============================
+
+# User Profile
+# POST  http://localhost:3000/get-profile
+# Content-Type: application/json
+
+# {
+#     "username":"kushalvala28296"
+# }
+
+# =============================
+
+# User Profile
+# POST  http://localhost:3000/get-blog
+# Content-Type: application/json
+
+# {
+#     "blog_id":"India-government-tightens-import-rules-for-unregistered-IT-and-electronic-goods-dI66GCuz6jplmZhR9G8ZZ"
+# }
+
+# =============================
+# Create-Blog
+# POST  http://localhost:3000/create-blog
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkzMWEyMDgxNmIwZWJhMjEzODYwZSIsImlhdCI6MTcxNzEyMTQ0Mn0.aEeaKM51Olt0UFiPlDzcLW8-KH2v9cOZnEm6vXPiFJc
+
+# {
+#     "title": "ssssBlog",
+#     "banner":"https://www.google.com/url?sa=i&url=https%3A%2F%2Fletsenhance.io%2F&psig=AOvVaw3QxVAFE9jcr0EvtKi9MrrI&ust=1717118778203000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIiWwomctIYDFQAAAAAdAAAAABAE",
+#     "description":"Short description",
+#     "content":{
+#         "blocks":[1,2]
+#     },
+#     "tags":["tag1","tag2"]
+# }
+
+# POST  http://localhost:3000/like-blog
+
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2NTkzMWEyMDgxNmIwZWJhMjEzODYwZSIsImlhdCI6MTcxNzEyMTQ0Mn0.aEeaKM51Olt0UFiPlDzcLW8-KH2v9cOZnEm6vXPiFJc
+
+# {"_id":"668b13f5464cf380745e3582","isLikedByUser":true}
+
+# otification
+POST http://localhost:3000/user-written-blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YTAyNjMxMzg1OTQzOTNhMTRhZTQ3YSIsImlhdCI6MTcyNDAwNzMzMH0.DSmy4Ri5_eemY8gJxupFG9o8gG8q4BZzHeX_4fVhGGI
+Content-Type: application/json
+
+{
+    "page":1,
+    "draft":true
+}
