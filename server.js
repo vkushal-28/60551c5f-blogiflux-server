@@ -378,7 +378,7 @@ server.post("/search-blogs", (req, res) => {
     findQuery = { draft: false, author };
   }
 
-  let maxLimit = limit || 2;
+  let maxLimit = limit || 5;
 
   Blog.find(findQuery)
     .populate(
