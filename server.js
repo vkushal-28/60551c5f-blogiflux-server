@@ -81,7 +81,7 @@ const formatDataToSend = (user) => {
     profile_img: user.personal_info.profile_img,
     username: user.personal_info.username,
     fullname: user.personal_info.fullname,
-    isAdmin: user.admin,
+    // isAdmin: user.admin,
   };
 };
 
@@ -459,149 +459,149 @@ server.post("/search-blogs-count", (req, res) => {
 
 server.post("/create-blog", verifyJJWT, (req, res) => {
   const authorId = req.user;
-  const isAdmin = req.admin;
+  // const isAdmin = req.admin;
 
-  if (isAdmin) {
-    let { title, banner, description, tags, content, draft, id } = req.body;
+  // if (isAdmin) {
+  let { title, banner, description, tags, content, draft, id } = req.body;
 
-    if (!title.length) {
-      return res.status(403).json({ error: "You must provide a title" });
+  if (!title.length) {
+    return res.status(403).json({ error: "You must provide a title" });
+  }
+
+  if (!draft) {
+    if (!description.length || description.length > 250) {
+      return res.status(403).json({
+        error: "You must provide blog description under 250 characters",
+      });
     }
 
-    if (!draft) {
-      if (!description.length || description.length > 250) {
-        return res.status(403).json({
-          error: "You must provide blog description under 250 characters",
-        });
-      }
-
-      if (!banner.length) {
-        return res.status(403).json({
-          error: "You must provide blog banner to publish it",
-        });
-      }
-
-      if (!content.blocks.length) {
-        return res.status(403).json({
-          error: "There must be some content to publish it",
-        });
-      }
-
-      if (!tags.length || tags.length > 10) {
-        return res.status(403).json({
-          error: "Provide tags to publish the blog",
-        });
-      }
+    if (!banner.length) {
+      return res.status(403).json({
+        error: "You must provide blog banner to publish it",
+      });
     }
 
-    tags = tags.map((tag) => tag.toLowerCase());
+    if (!content.blocks.length) {
+      return res.status(403).json({
+        error: "There must be some content to publish it",
+      });
+    }
 
-    let blog_id =
-      id ||
-      title
-        .replace(/[^a-zA-Z0-9]/g, " ")
-        .replace(/\s+/g, "-")
-        .trim() + nanoid();
+    if (!tags.length || tags.length > 10) {
+      return res.status(403).json({
+        error: "Provide tags to publish the blog",
+      });
+    }
+  }
 
-    if (id) {
-      Blog.findOneAndUpdate(
-        { blog_id },
-        {
-          title,
-          description,
-          content,
-          banner,
-          tags,
-          draft: draft ? draft : false,
-        }
-      )
-        .then((blog) => {
-          return res.status(200).json({ id: blog_id });
-        })
-        .catch((err) => {
-          return res.status(500).json({ error: err.message });
-        });
-    } else {
-      let blog = new Blog({
+  tags = tags.map((tag) => tag.toLowerCase());
+
+  let blog_id =
+    id ||
+    title
+      .replace(/[^a-zA-Z0-9]/g, " ")
+      .replace(/\s+/g, "-")
+      .trim() + nanoid();
+
+  if (id) {
+    Blog.findOneAndUpdate(
+      { blog_id },
+      {
         title,
-        banner,
         description,
         content,
+        banner,
         tags,
-        author: authorId,
-        blog_id,
-        draft: Boolean(draft),
-      });
-
-      blog
-        .save()
-        .then((blog) => {
-          let incrementVal = draft ? 0 : 1;
-          User.findOneAndUpdate(
-            { _id: authorId },
-            {
-              $inc: { "account_info.total_posts": incrementVal },
-              $push: {
-                blogs: blog._id,
-              },
-            }
-          )
-            .then((user) => {
-              return res.status(200).json({ id: blog_id });
-            })
-            .catch((err) => {
-              return res
-                .status(500)
-                .json({ error: "Failed to update total posts number" });
-            });
-        })
-        .catch((err) => {
-          return res.status(200).json({ error: err.message });
-        });
-    }
-  } else {
-    return res
-      .status(500)
-      .json({ error: "You don't have permissions to create any blog" });
-  }
-});
-
-server.post("/delete-blog", verifyJJWT, (req, res) => {
-  const user_id = req.user;
-  const { blog_id } = req.body;
-  const isAdmin = req.admin;
-
-  if (isAdmin) {
-    Blog.findOneAndDelete({ blog_id })
+        draft: draft ? draft : false,
+      }
+    )
       .then((blog) => {
-        Notification.deleteMany({ blog: blog._id }).then((data) => {
-          console.log("Notifications deleted");
-        });
-
-        Comment.deleteMany({ blog_id: blog._id }).then((data) => {
-          console.log("Comments deleted");
-        });
-
-        User.findOneAndUpdate(
-          { _id: user_id },
-          {
-            $pull: { blog: blog._id },
-            $inc: { "account_info.total_posts": -1 },
-          }
-        ).then((data) => {
-          console.log("Comments deleted");
-        });
-
-        return res.status(200).json({ status: "done" });
+        return res.status(200).json({ id: blog_id });
       })
       .catch((err) => {
         return res.status(500).json({ error: err.message });
       });
   } else {
-    return res
-      .status(500)
-      .json({ error: "You don't have permissions to create any blog" });
+    let blog = new Blog({
+      title,
+      banner,
+      description,
+      content,
+      tags,
+      author: authorId,
+      blog_id,
+      draft: Boolean(draft),
+    });
+
+    blog
+      .save()
+      .then((blog) => {
+        let incrementVal = draft ? 0 : 1;
+        User.findOneAndUpdate(
+          { _id: authorId },
+          {
+            $inc: { "account_info.total_posts": incrementVal },
+            $push: {
+              blogs: blog._id,
+            },
+          }
+        )
+          .then((user) => {
+            return res.status(200).json({ id: blog_id });
+          })
+          .catch((err) => {
+            return res
+              .status(500)
+              .json({ error: "Failed to update total posts number" });
+          });
+      })
+      .catch((err) => {
+        return res.status(200).json({ error: err.message });
+      });
   }
+  // } else {
+  //   return res
+  //     .status(500)
+  //     .json({ error: "You don't have permissions to create any blog" });
+  // }
+});
+
+server.post("/delete-blog", verifyJJWT, (req, res) => {
+  const user_id = req.user;
+  const { blog_id } = req.body;
+  // const isAdmin = req.admin;
+
+  // if (isAdmin) {
+  Blog.findOneAndDelete({ blog_id })
+    .then((blog) => {
+      Notification.deleteMany({ blog: blog._id }).then((data) => {
+        console.log("Notifications deleted");
+      });
+
+      Comment.deleteMany({ blog_id: blog._id }).then((data) => {
+        console.log("Comments deleted");
+      });
+
+      User.findOneAndUpdate(
+        { _id: user_id },
+        {
+          $pull: { blog: blog._id },
+          $inc: { "account_info.total_posts": -1 },
+        }
+      ).then((data) => {
+        console.log("Comments deleted");
+      });
+
+      return res.status(200).json({ status: "done" });
+    })
+    .catch((err) => {
+      return res.status(500).json({ error: err.message });
+    });
+  // } else {
+  //   return res
+  //     .status(500)
+  //     .json({ error: "You don't have permissions to create any blog" });
+  // }
 });
 
 server.post("/search-users", (req, res) => {
