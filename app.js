@@ -7,6 +7,7 @@ const blogRoutes = require("./routes/blogRoutes");
 const userRoutes = require("./routes/userRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const tagRoutes = require("./routes/tagRoutes");
 const serviceAccountKey = require("./firebase-secret.json");
 const admin = require("firebase-admin");
 
@@ -44,6 +45,7 @@ app.use("/api", blogRoutes);
 app.use("/api", userRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", commentRoutes);
+app.use("/api", tagRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
